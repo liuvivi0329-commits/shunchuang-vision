@@ -7,15 +7,61 @@ heroVideo.querySelector('source').addEventListener('error',()=>{heroStage.classL
 function playHero(){heroVideo.muted=true;const attempt=heroVideo.play();if(attempt)attempt.catch(()=>{heroPlay.hidden=false})}
 heroPlay.addEventListener('click',playHero);
 playHero();
-const conferenceVideo=document.querySelector('#conference-video');
 const conferenceError=document.querySelector('#conference-error');
-conferenceVideo.addEventListener('error',()=>{conferenceError.hidden=false});
-conferenceVideo.querySelector('source').addEventListener('error',()=>{conferenceError.hidden=false});
-if('IntersectionObserver' in window){
-  let conferenceStarted=false;
-  const conferenceObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){if(!conferenceStarted){conferenceStarted=true;conferenceVideo.play().catch(()=>{ /* Native controls remain available if autoplay is blocked. */ })}}else{conferenceVideo.pause();conferenceStarted=false}})},{threshold:.35});
-  conferenceObserver.observe(conferenceVideo);
+const conferenceClips=[
+ {src:'assets/ningbo-53.mp4',title:'新华社&26年中国-中东欧国家创新合作大会'},
+ {src:'assets/tianyige.mp4',title:'新华社&宁波天一阁'},
+ {src:'assets/kuakuaqun.mp4',title:'新华社&宁波天一阁&古代夸夸群'}
+];
+const swipeArea=document.querySelector('#conference-swipe');
+swipeArea.replaceChildren();
+let conferenceIndex=0,conferenceVisible=false,conferenceTimer;
+const conferenceSlides=conferenceClips.map((clip,index)=>{
+ const slide=document.createElement('div');slide.className='conference-slide';
+ const video=document.createElement('video');video.src=clip.src;video.muted=true;video.loop=true;video.playsInline=true;video.preload='metadata';video.setAttribute('aria-label',clip.title);
+ video.addEventListener('loadedmetadata',()=>{if(index!==conferenceIndex&&video.duration>1)video.currentTime=.5});
+ video.addEventListener('error',()=>{if(index===conferenceIndex)conferenceError.hidden=false});
+ const button=document.createElement('button');button.type='button';button.className='conference-preview';button.setAttribute('aria-label','播放：'+clip.title);
+ const label=document.createElement('span');label.textContent=clip.title;button.append(label);
+ button.addEventListener('click',()=>showConference(index));
+ slide.append(video,button);swipeArea.append(slide);return {slide,video,button};
+});
+function playConference(){const video=conferenceSlides[conferenceIndex].video;video.play().catch(()=>{/* Native controls remain available. */});}
+function showConference(index,initial=false){
+ clearTimeout(conferenceTimer);conferenceIndex=(index+3)%3;conferenceError.hidden=true;
+ conferenceSlides.forEach(({slide,video,button},i)=>{
+  const active=i===conferenceIndex;video.pause();video.controls=active;video.tabIndex=active?0:-1;button.hidden=active;
+  slide.dataset.position=active?'center':i===(conferenceIndex+1)%3?'right':'left';
+ });
+ document.querySelector('#conference-subtitle').textContent=conferenceClips[conferenceIndex].title;
+ document.querySelectorAll('[data-conference]').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===conferenceIndex)));
+ if(!initial)conferenceTimer=setTimeout(()=>{if(conferenceVisible)playConference()},window.matchMedia('(prefers-reduced-motion: reduce)').matches?0:450);
 }
+document.querySelector('#conference-prev').addEventListener('click',()=>showConference(conferenceIndex-1));
+document.querySelector('#conference-next').addEventListener('click',()=>showConference(conferenceIndex+1));
+document.querySelectorAll('[data-conference]').forEach(button=>button.addEventListener('click',()=>showConference(Number(button.dataset.conference))));
+let swipeStart=null;
+swipeArea.addEventListener('pointerdown',event=>{
+ if(event.target.closest('button')||event.button!==0)return;
+ const rect=event.target.getBoundingClientRect();if(event.clientY>rect.bottom-56)return;
+ swipeStart={x:event.clientX,y:event.clientY,id:event.pointerId};
+});
+window.addEventListener('pointerup',event=>{
+ if(!swipeStart||event.pointerId!==swipeStart.id)return;
+ const dx=event.clientX-swipeStart.x,dy=event.clientY-swipeStart.y;swipeStart=null;
+ if(Math.abs(dx)>55&&Math.abs(dx)>Math.abs(dy)*1.5)showConference(conferenceIndex+(dx>0?1:-1));
+});
+window.addEventListener('pointercancel',()=>{swipeStart=null});
+showConference(0,true);
+if('IntersectionObserver' in window){
+ const observer=new IntersectionObserver(entries=>entries.forEach(entry=>{conferenceVisible=entry.isIntersecting;if(conferenceVisible)playConference();else conferenceSlides.forEach(({video})=>video.pause())}),{threshold:.35});observer.observe(swipeArea);
+}else{conferenceVisible=true;playConference()}
+const selectedRow=document.querySelector('.selected-video-row');
+function scrollSelected(direction){const card=selectedRow.querySelector('.selected-video-card');const gap=parseFloat(getComputedStyle(selectedRow).gap)||0;selectedRow.scrollBy({left:direction*(card.getBoundingClientRect().width+gap),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'})}
+document.querySelector('#selected-prev').addEventListener('click',()=>scrollSelected(-1));
+document.querySelector('#selected-next').addEventListener('click',()=>scrollSelected(1));
+selectedRow.addEventListener('keydown',event=>{if(event.target!==selectedRow)return;if(event.key==='ArrowLeft'||event.key==='ArrowRight'){event.preventDefault();scrollSelected(event.key==='ArrowLeft'?-1:1)}});
+document.querySelectorAll('.selected-video-card video').forEach(video=>video.addEventListener('play',()=>{document.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()})}));
 const menu=document.querySelector('.menu'),nav=document.querySelector('nav');
 menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'收起导航':'展开导航')});
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')}));
