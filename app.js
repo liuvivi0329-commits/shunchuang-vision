@@ -1,3 +1,21 @@
+const heroVideo=document.querySelector('#hero-video');
+const heroStage=document.querySelector('.hero-video-stage');
+const heroPlay=document.querySelector('#hero-play');
+heroVideo.addEventListener('playing',()=>{heroStage.classList.add('video-started');heroPlay.hidden=true;document.querySelector('#hero-video-error').hidden=true});
+heroVideo.addEventListener('error',()=>{heroStage.classList.add('video-started');heroPlay.hidden=true;document.querySelector('#hero-video-error').hidden=false});
+heroVideo.querySelector('source').addEventListener('error',()=>{heroStage.classList.add('video-started');document.querySelector('#hero-video-error').hidden=false});
+function playHero(){heroVideo.muted=true;const attempt=heroVideo.play();if(attempt)attempt.catch(()=>{heroPlay.hidden=false})}
+heroPlay.addEventListener('click',playHero);
+playHero();
+const conferenceVideo=document.querySelector('#conference-video');
+const conferenceError=document.querySelector('#conference-error');
+conferenceVideo.addEventListener('error',()=>{conferenceError.hidden=false});
+conferenceVideo.querySelector('source').addEventListener('error',()=>{conferenceError.hidden=false});
+if('IntersectionObserver' in window){
+  let conferenceStarted=false;
+  const conferenceObserver=new IntersectionObserver(entries=>{entries.forEach(entry=>{if(entry.isIntersecting){if(!conferenceStarted){conferenceStarted=true;conferenceVideo.play().catch(()=>{ /* Native controls remain available if autoplay is blocked. */ })}}else{conferenceVideo.pause();conferenceStarted=false}})},{threshold:.35});
+  conferenceObserver.observe(conferenceVideo);
+}
 const menu=document.querySelector('.menu'),nav=document.querySelector('nav');
 menu.addEventListener('click',()=>{const open=nav.classList.toggle('open');menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'收起导航':'展开导航')});
 nav.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>{nav.classList.remove('open');menu.setAttribute('aria-expanded','false')}));
@@ -10,7 +28,7 @@ videoSection.innerHTML='<div class="profile-video-heading"><div><p class="eyebro
 ipDialog.append(videoSection);
 const videoGrid=videoSection.querySelector('.profile-video-grid');
 videoWorks.forEach((work,index)=>{const article=document.createElement('article');article.className='profile-video-card';const video=document.createElement('video');video.controls=true;video.playsInline=true;video.preload='none';video.dataset.src=`assets/suxiao/${work.file}`;video.setAttribute('aria-label',work.title);const fallback=document.createElement('a');fallback.href=video.dataset.src;fallback.textContent='打开视频';video.append(fallback);const title=document.createElement('h4');title.textContent=`0${index+1} / ${work.title}`;const note=document.createElement('p');note.textContent=work.note;const error=document.createElement('p');error.className='video-error';error.hidden=true;error.textContent='视频暂时无法播放，请检查文件是否完整，或使用支持 MP4 的浏览器。';video.addEventListener('error',()=>{error.hidden=false});video.addEventListener('play',()=>videoGrid.querySelectorAll('video').forEach(other=>{if(other!==video)other.pause()}));article.append(video,title,note,error);videoGrid.append(article)});
-document.querySelectorAll('[data-ip]').forEach(card=>card.addEventListener('click',()=>{const p=profiles[card.dataset.ip],isSuxiao=card.dataset.ip==='suxiao';document.querySelector('#detail-name').textContent=p.name;document.querySelector('#detail-tag').textContent=p.tag;document.querySelector('#detail-description').textContent=p.description;const img=document.querySelector('#detail-image');img.src=`assets/${p.image}.webp`;img.alt=p.name;ipDialog.classList.toggle('suxiao-profile',isSuxiao);videoSection.hidden=!isSuxiao;if(isSuxiao)videoGrid.querySelectorAll('video').forEach(video=>{if(!video.hasAttribute('src'))video.src=video.dataset.src});ipDialog.showModal();ipDialog.scrollTop=0;document.body.classList.add('profile-open')}));
+document.querySelectorAll('[data-ip]').forEach(card=>card.addEventListener('click',()=>{const p=profiles[card.dataset.ip],isSuxiao=card.dataset.ip==='suxiao';document.querySelector('#detail-name').textContent=p.name;document.querySelector('#detail-tag').textContent=p.tag;document.querySelector('#detail-description').textContent=p.description;const img=document.querySelector('#detail-image');img.src=card.dataset.ip==='ayu'?'assets/ayu.png':`assets/${p.image}.webp`;img.alt=p.name;ipDialog.classList.toggle('suxiao-profile',isSuxiao);videoSection.hidden=!isSuxiao;if(isSuxiao)videoGrid.querySelectorAll('video').forEach(video=>{if(!video.hasAttribute('src'))video.src=video.dataset.src});ipDialog.showModal();ipDialog.scrollTop=0;document.body.classList.add('profile-open')}));
 ipDialog.addEventListener('close',()=>{videoGrid.querySelectorAll('video').forEach(video=>{video.pause();if(video.readyState>0)video.currentTime=0});document.body.classList.remove('profile-open')});
 document.querySelectorAll('dialog').forEach(dialog=>{dialog.querySelector('.close').addEventListener('click',()=>dialog.close());dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}})});
 document.querySelector('#cooperate').addEventListener('click',()=>document.querySelector('#contact-dialog').showModal());
