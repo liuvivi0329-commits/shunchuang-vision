@@ -9,9 +9,22 @@ heroPlay.addEventListener('click',playHero);
 playHero();
 const conferenceError=document.querySelector('#conference-error');
 const conferenceClips=[
- {src:'assets/ningbo-53.mp4',title:'新华社&26年中国-中东欧国家创新合作大会'},
- {src:'assets/tianyige.mp4',title:'新华社&宁波天一阁'},
- {src:'assets/kuakuaqun.mp4',title:'新华社&宁波天一阁&古代夸夸群'}
+  {
+    "src": "assets/cooperation/1.mp4",
+    "title": "新华社&26年中国-中东欧国家创新合作大会"
+  },
+  {
+    "src": "assets/cooperation/2.mp4",
+    "title": "瞬创科技&CCTV6佳片有约合作短片"
+  },
+  {
+    "src": "assets/cooperation/3.mp4",
+    "title": "苏晓&百度盛典"
+  },
+  {
+    "src": "assets/cooperation/4.mp4",
+    "title": "新华社&AI文博系列"
+  }
 ];
 const swipeArea=document.querySelector('#conference-swipe');
 swipeArea.replaceChildren();
@@ -28,10 +41,13 @@ const conferenceSlides=conferenceClips.map((clip,index)=>{
 });
 function playConference(){const video=conferenceSlides[conferenceIndex].video;video.play().catch(()=>{/* Native controls remain available. */});}
 function showConference(index,initial=false){
- clearTimeout(conferenceTimer);conferenceIndex=(index+3)%3;conferenceError.hidden=true;
+ clearTimeout(conferenceTimer);conferenceIndex=(index+conferenceClips.length)%conferenceClips.length;conferenceError.hidden=true;
  conferenceSlides.forEach(({slide,video,button},i)=>{
   const active=i===conferenceIndex;video.pause();video.controls=active;video.tabIndex=active?0:-1;button.hidden=active;
-  slide.dataset.position=active?'center':i===(conferenceIndex+1)%3?'right':'left';
+  const offset=(i-conferenceIndex+conferenceClips.length)%conferenceClips.length;
+  const visible=active||offset===1||offset===conferenceClips.length-1;
+  slide.dataset.position=active?'center':offset===1?'right':offset===conferenceClips.length-1?'left':'offstage';
+  slide.inert=!visible;slide.setAttribute('aria-hidden',String(!visible));
  });
  document.querySelector('#conference-subtitle').textContent=conferenceClips[conferenceIndex].title;
  document.querySelectorAll('[data-conference]').forEach((button,i)=>button.setAttribute('aria-pressed',String(i===conferenceIndex)));
