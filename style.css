@@ -51,6 +51,7 @@
 .conference-slide[data-position=center]{transform:translateX(0);z-index:3;filter:brightness(1)}
 .conference-slide[data-position=left]{transform:translateX(-104%) scale(.92);z-index:1;filter:brightness(.55)}
 .conference-slide[data-position=right]{transform:translateX(104%) scale(.92);z-index:1;filter:brightness(.55)}
+.conference-slide[data-position=offstage]{transform:translateX(208%) scale(.92);visibility:hidden;pointer-events:none;z-index:0}
 .conference-slide video{width:100%;height:100%;object-fit:contain}
 .conference-preview{position:absolute;inset:0;width:100%;height:100%;border:0;background:transparent;color:white;cursor:pointer;padding:20px}
 .conference-preview[hidden]{display:none}
@@ -132,6 +133,15 @@ body.profile-open{overflow:hidden}
 .selected-video-card{min-width:0}.selected-video-card video{display:block;width:100%;height:clamp(300px,57svh,640px);object-fit:contain;background:#030305;border:1px solid var(--line);border-radius:8px}
 .selected-video-card h3{font-size:20px;font-weight:500;margin:16px 0 8px;color:var(--gold)}.selected-video-card p{font-size:14px;line-height:1.7;color:var(--muted);margin:0}
 @media(max-width:650px){.selected-videos{padding:40px 6%;min-height:0}.selected-video-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;padding-bottom:16px}.selected-video-card{flex:0 0 82%;scroll-snap-align:center}.selected-video-card video{height:52svh}}
+.hit-dramas{background:#0b0a12;padding:48px 6%;min-height:calc(100svh - 90px)}
+.drama-row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 0 20px;scrollbar-color:#9b793d #17151d}
+.drama-card{flex:0 0 calc((100% - 96px)/5);min-width:190px;border:0;padding:0;background:transparent;color:var(--text);text-align:left;scroll-snap-align:start;cursor:pointer}
+.drama-card img{display:block;width:100%;aspect-ratio:2/3;object-fit:contain;background:#060609;border-radius:8px}
+.drama-card span{display:block;font-size:18px;margin:16px 0 8px;line-height:1.6}.drama-card small{color:var(--gold);font-size:14px}
+.drama-card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+#drama-dialog{max-width:1200px;width:94vw;padding:40px}#drama-dialog h2{padding-right:35px}
+.drama-episodes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;margin-top:24px}.drama-episodes h3{font-size:18px;font-weight:500;color:var(--gold)}.drama-episodes video{width:100%;height:min(58svh,580px);object-fit:contain;background:#030305}.drama-episodes p{font-size:14px;color:var(--gold)}
+@media(max-width:700px){.drama-card{flex-basis:65%;min-width:0}.hit-dramas{min-height:0}.drama-episodes{grid-template-columns:1fr}#drama-dialog{padding:28px 20px}.drama-episodes video{height:55svh}}
 /* Compact flagship profile: portrait and recognition share one desktop screen. */
 .story-profile{height:calc(100svh - 90px);min-height:650px;grid-template-columns:minmax(0,36fr) minmax(0,64fr);padding:32px 6%;gap:4%;scroll-margin-top:90px}
 .story-profile-image{height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
