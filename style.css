@@ -164,6 +164,14 @@ body.profile-open{overflow:hidden}
 #drama-dialog.single-episode .drama-episodes{grid-template-columns:1fr}
 #drama-dialog.single-episode .drama-episodes h3{display:none}
 #drama-dialog.single-episode .drama-episodes video{height:min(66svh,680px)}
+.selected-player{position:relative}.selected-cover{position:absolute;inset:0;width:100%;height:100%;padding:0;border:0;border-radius:8px;overflow:hidden;background:#030305;cursor:pointer}.selected-cover[hidden]{display:none}.selected-cover img{display:block;width:100%;height:100%;object-fit:contain}.selected-cover>span{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:grid;place-items:center;width:58px;height:58px;border-radius:50%;border:1px solid #ffffff80;background:#0008;color:white;font-size:22px;padding-left:3px}.selected-cover:focus-visible{outline:2px solid var(--gold);outline-offset:3px}.selected-play-error{position:absolute;bottom:55px;left:10px;right:10px;background:#090a0eee;padding:10px;color:var(--gold);font-size:14px}
+.selected-video-row{align-items:flex-start}
+.selected-video-row .selected-player{width:100%;aspect-ratio:16/9;overflow:hidden;border-radius:8px;background:#030305}
+.selected-video-row .selected-player video{width:100%;height:100%;position:absolute;inset:0;object-fit:contain}
+.selected-video-row .selected-cover img{object-fit:cover;object-position:center}
+.suxiao-player{position:relative;width:100%;aspect-ratio:16/9;background:#030305}
+.profile-video-card .suxiao-player video{position:absolute;inset:0;width:100%;height:100%;max-height:none;aspect-ratio:auto;object-fit:contain}
+.suxiao-player .selected-cover img{object-fit:contain}
 /* Compact flagship profile: portrait and recognition share one desktop screen. */
 .story-profile{height:calc(100svh - 90px);min-height:650px;grid-template-columns:minmax(0,36fr) minmax(0,64fr);padding:32px 6%;gap:4%;scroll-margin-top:90px}
 .story-profile-image{height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
