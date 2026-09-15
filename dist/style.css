@@ -135,8 +135,8 @@ body.profile-open{overflow:hidden}
 @media(max-width:650px){.selected-videos{padding:40px 6%;min-height:0}.selected-video-row{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;gap:16px;padding-bottom:16px}.selected-video-card{flex:0 0 82%;scroll-snap-align:center}.selected-video-card video{height:52svh}}
 .hit-dramas{background:#0b0a12;padding:48px 6%;min-height:calc(100svh - 90px)}
 .drama-row{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding:0 0 20px;scrollbar-color:#9b793d #17151d}
-.drama-card{flex:0 0 calc((100% - 96px)/5);min-width:190px;border:0;padding:0;background:transparent;color:var(--text);text-align:left;scroll-snap-align:start;cursor:pointer}
-.drama-card img{display:block;width:100%;aspect-ratio:2/3;object-fit:contain;background:#060609;border-radius:8px}
+.drama-card{flex:0 0 calc((100% - 96px)/5);min-width:190px;border:0;padding:0;background:transparent;color:var(--text);text-align:left;scroll-snap-align:start;cursor:pointer;display:flex;flex-direction:column;align-items:stretch;justify-content:flex-start}
+.drama-card img{display:block;width:100%;height:auto;aspect-ratio:2/3;object-fit:cover;object-position:center;flex-shrink:0;background:#060609;border-radius:8px}
 .drama-card span{display:block;font-size:18px;margin:16px 0 8px;line-height:1.6}.drama-card small{color:var(--gold);font-size:14px}
 .drama-card:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
 #drama-dialog{max-width:1200px;width:94vw;padding:40px}#drama-dialog h2{padding-right:35px}
@@ -161,6 +161,9 @@ body.profile-open{overflow:hidden}
 .ip-grid-page .showcase-copy{padding:18px}.ip-grid-page .showcase-copy h3{font-size:26px}.ip-grid-page .showcase-copy p{font-size:16px;line-height:1.7}
 @media(max-width:1050px){.ip-showcase .ip-grid-page .showcase-card{min-height:320px;grid-template-columns:32% minmax(0,1fr)}}
 @media(max-width:600px){.ip-showcase .ip-grid-page{gap:12px}.ip-showcase .ip-grid-page .showcase-card{min-height:0;grid-template-columns:1fr;grid-template-rows:180px auto}.ip-showcase .ip-grid-page .showcase-image{min-height:180px}.ip-grid-page .showcase-copy{padding:12px}.ip-grid-page .showcase-copy h3{font-size:22px}.ip-grid-page .showcase-copy p{font-size:14px}.ip-grid-page .showcase-number{font-size:11px;letter-spacing:0}}
+#drama-dialog.single-episode .drama-episodes{grid-template-columns:1fr}
+#drama-dialog.single-episode .drama-episodes h3{display:none}
+#drama-dialog.single-episode .drama-episodes video{height:min(66svh,680px)}
 /* Compact flagship profile: portrait and recognition share one desktop screen. */
 .story-profile{height:calc(100svh - 90px);min-height:650px;grid-template-columns:minmax(0,36fr) minmax(0,64fr);padding:32px 6%;gap:4%;scroll-margin-top:90px}
 .story-profile-image{height:100%;min-height:0;display:flex;align-items:center;justify-content:center}
