@@ -14,12 +14,16 @@ const conferenceClips=[
     "title": "新华社&26年中国-中东欧国家创新合作大会"
   },
   {
-    "src": "assets/cooperation/2.mp4",
-    "title": "瞬创科技&CCTV6佳片有约合作短片"
-  },
-  {
     "src": "assets/cooperation/3.mp4",
     "title": "苏晓&百度盛典"
+  },
+  {
+    "src": "assets/cooperation/tiktok.mp4",
+    "title": "瞬创科技&Tiktok"
+  },
+  {
+    "src": "assets/cooperation/2.mp4",
+    "title": "瞬创科技&CCTV6佳片有约合作短片"
   },
   {
     "src": "assets/cooperation/4.mp4",
